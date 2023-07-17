@@ -1,0 +1,40 @@
+###############
+# IF YOU WANT TO TEST ALL THE APP, YOU CAN USE THIS FILE
+###############
+version: "3"
+services:
+  app:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=test
+
+  frontend:
+    build:
+      context: ./frontend/
+#      target: 'develop-stage'
+      dockerfile: Dockerfile
+    ports:
+    - '8080:8080'
+#    volumes:
+#    - '.:/app'
+    command: /bin/sh -c "yarn serve"
+
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=test
+    ports:
+      - "5432:5432"
+
